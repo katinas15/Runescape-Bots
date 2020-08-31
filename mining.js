@@ -3,10 +3,10 @@ var robot = require("robotjs");
 let mouseDelayOne = 1
 let mouseDelayTwo = 3
 
-let timeoutNodeOne = 1000
-let timeoutNodeTwo = 2000
-let deltaNodeOne = 25
-let deltaNodeTwo = 10
+let timeoutNodeOne = 2000
+let timeoutNodeTwo = 3000
+let deltaNodeOne = 50
+let deltaNodeTwo = 25
 let nodes = [
     { x: 614, y: 591 },
     { x: 807, y: 809 },
@@ -31,12 +31,23 @@ console.log('Starting')
 function start(){
     while(true){
         sleep(getRndInteger(timeoutNodeOne, timeoutNodeTwo))
+        sleep(1000)
         for(let i = 0; i<nodes.length; i++){
             console.log('Node - ' + i)
             let node = nodes[i]
             smoothAction(node.x, node.y)
             sleep(getRndInteger(timeoutNodeOne, timeoutNodeTwo))
         }
+
+        robot.keyToggle('shift', 'down')
+        sleep(getRndInteger(timeoutInvOne, timeoutInvTwo))
+        for(let i = 0; i<invDrop.length; i++){
+            console.log('Inv - ' + i)
+            let node = invDrop[i]
+            smoothAction(node.x, node.y)
+            sleep(getRndInteger(timeoutInvOne, timeoutInvTwo))
+        }
+        robot.keyToggle('shift', 'up')
     }
 }
 
@@ -71,6 +82,7 @@ async function smoothAction(x, y){
                 }
             }
         }
+        robot.mouseClick()
         resolve()
     })
    
@@ -79,9 +91,14 @@ async function smoothAction(x, y){
 function sleep(n){
     Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, n);
 }
-
+sleep(5000)
+robot.keyToggle('shift', 'down')
+robot.keyTap('shift')
+robot.keyTap('a')
+sleep(5000)
 // GET MOUSE POS
-setTimeout(function(){ 
-    start()
-}, 5000);
+// setTimeout(function(){ 
+//     start()
+// }, 5000);
 
+a
