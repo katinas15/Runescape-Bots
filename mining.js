@@ -1,27 +1,40 @@
 var robot = require("robotjs");
 
-let mouseDelayOne = 1
-let mouseDelayTwo = 3
-
 let timeoutNodeOne = 2000
 let timeoutNodeTwo = 3000
-let deltaNodeOne = 50
-let deltaNodeTwo = 25
+let deltaNodeOne = 25
+let deltaNodeTwo = 90
+
 let nodes = [
-    { x: 614, y: 591 },
-    { x: 807, y: 809 },
-    { x: 1041, y: 609 }
+    { x: 712, y: 607 },
+    { x: 927, y: 830 },
+    { x: 1175, y: 628 }
 ]
+
+
+// let nodes = [
+//     { x: 614, y: 591 },
+//     { x: 807, y: 809 },
+//     { x: 1041, y: 609 }
+// ]
+
 
 let timeoutInvOne = 200
 let timeoutInvTwo = 400
-let invDeltaOne = 10
-let invDeltaTwo = 5
+let invDeltaOne = 5
+let invDeltaTwo = 10
+
 let invDrop = [
-    { x: 1480, y: 722 },
-    { x: 1523, y: 717 },
-    { x: 1562, y: 719 }
+    { x: 1716, y: 760 },
+    { x: 1759, y: 759 },
+    { x: 1804, y: 759 }
 ]
+
+// let invDrop = [
+//     { x: 1480, y: 722 },
+//     { x: 1523, y: 717 },
+//     { x: 1562, y: 719 }
+// ]
 
 let mouseRandomMove = 5
 let mouseSpeed = 10
@@ -32,19 +45,28 @@ function start(){
     while(true){
         sleep(getRndInteger(timeoutNodeOne, timeoutNodeTwo))
         sleep(1000)
+        if(getRndInteger(1,10) > 9) shuffle(nodes)
+
         for(let i = 0; i<nodes.length; i++){
+            if(getRndInteger(1,100) > 91) continue
             console.log('Node - ' + i)
             let node = nodes[i]
-            smoothAction(node.x, node.y)
+            let x = node.x + getRndInteger(deltaNodeOne, deltaNodeTwo) * (Math.random() < 0.5 ? -1 : 1);
+            let y = node.y + getRndInteger(deltaNodeOne, deltaNodeTwo) * (Math.random() < 0.5 ? -1 : 1);
+            if(getRndInteger(1,100) > 5) smoothAction(x, y)
             sleep(getRndInteger(timeoutNodeOne, timeoutNodeTwo))
         }
 
         robot.keyToggle('shift', 'down')
         sleep(getRndInteger(timeoutInvOne, timeoutInvTwo))
+        if(getRndInteger(1,10) > 9) shuffle(invDrop)
         for(let i = 0; i<invDrop.length; i++){
+            if(getRndInteger(1,100) > 98) continue
             console.log('Inv - ' + i)
             let node = invDrop[i]
-            smoothAction(node.x, node.y)
+            let x = node.x + getRndInteger(invDeltaOne, invDeltaTwo) * (Math.random() < 0.5 ? -1 : 1);
+            let y = node.y + getRndInteger(invDeltaOne, invDeltaTwo) * (Math.random() < 0.5 ? -1 : 1);
+            if(getRndInteger(1,100) > 4) smoothAction(x, y)
             sleep(getRndInteger(timeoutInvOne, timeoutInvTwo))
         }
         robot.keyToggle('shift', 'up')
@@ -63,7 +85,7 @@ async function smoothAction(x, y){
         console.log('MOVING MOUSE')
         let mouse = robot.getMousePos()
         console.log(mouse)
-        robot.setMouseDelay(2);
+        robot.setMouseDelay(getRndInteger(2, mouseSpeed));
         while(mouse.x != x || mouse.y != y){
             mouse = robot.getMousePos()
             let move1 = getRndInteger(1, mouseRandomMove)
@@ -91,14 +113,17 @@ async function smoothAction(x, y){
 function sleep(n){
     Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, n);
 }
-sleep(5000)
-robot.keyToggle('shift', 'down')
-robot.keyTap('shift')
-robot.keyTap('a')
-sleep(5000)
-// GET MOUSE POS
-// setTimeout(function(){ 
-//     start()
-// }, 5000);
 
-a
+function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+// GET MOUSE POS
+setTimeout(function(){ 
+    start()
+}, 5000);
+
