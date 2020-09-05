@@ -1,4 +1,5 @@
-var robot = require("robotjs");
+const robot = require("robotjs");
+const {getRndInteger, smoothAction, sleep, shuffle} = require('./basic.js')
 
 let timeoutNodeOne = 1600
 let timeoutNodeTwo = 2000
@@ -36,12 +37,9 @@ let invDrop = [
     { x: 1562, y: 719 }
 ]
 
-let mouseRandomMove = 5
-let mouseSpeed = 10
-
 
 console.log('Starting')
-function start(){
+async function start(){
     while(true){
         sleep(getRndInteger(timeoutNodeOne, timeoutNodeTwo))
         if(getRndInteger(1,10) > 9) shuffle(nodes)
@@ -52,11 +50,11 @@ function start(){
             let node = nodes[i]
             let x = node.x + getRndInteger(deltaNodeOne, deltaNodeTwo) * (Math.random() < 0.5 ? -1 : 1);
             let y = node.y + getRndInteger(deltaNodeOne, deltaNodeTwo) * (Math.random() < 0.5 ? -1 : 1);
-            if(getRndInteger(1,100) > 5) smoothAction(x, y)
+            if(getRndInteger(1,100) > 5) await smoothAction(x, y)
             sleep(getRndInteger(timeoutNodeOne, timeoutNodeTwo))
         }
 
-        // robot.keyToggle('/', 'down')
+        robot.keyToggle('shift', 'down')
         sleep(getRndInteger(timeoutInvOne, timeoutInvTwo))
         if(getRndInteger(1,10) > 9) shuffle(invDrop)
         for(let i = 0; i<invDrop.length; i++){
@@ -68,58 +66,11 @@ function start(){
             if(getRndInteger(1,100) > 4) smoothAction(x, y)
             sleep(getRndInteger(timeoutInvOne, timeoutInvTwo))
         }
-        // robot.keyToggle('/', 'down')
+        robot.keyToggle('shift', 'down')
     }
 }
 
 
-
-function getRndInteger(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) ) + min;
-}
-
-
-async function smoothAction(x, y){
-    return new Promise(resolve => {
-        console.log('MOVING MOUSE')
-        let mouse = robot.getMousePos()
-        console.log(mouse)
-        robot.setMouseDelay(getRndInteger(1, mouseSpeed/2));
-        while(mouse.x != x || mouse.y != y){
-            mouse = robot.getMousePos()
-            let move1 = getRndInteger(1, mouseRandomMove)
-            let move2 = getRndInteger(1, mouseRandomMove)
-            let xAdd = x > mouse.x
-            let yAdd = y > mouse.y
-            if(mouse.x != x || mouse.y != y){
-                if(xAdd && yAdd){
-                    robot.moveMouse(mouse.x + move1, mouse.y + move2);
-                } else if (xAdd && !yAdd){
-                    robot.moveMouse(mouse.x + move1, mouse.y - move2);
-                } else if (!xAdd && yAdd){
-                    robot.moveMouse(mouse.x - move1, mouse.y + move2);
-                } else if(!xAdd && !yAdd){
-                    robot.moveMouse(mouse.x - move1, mouse.y - move2);
-                }
-            }
-        }
-        robot.mouseClick()
-        resolve()
-    })
-   
-}
-
-function sleep(n){
-    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, n);
-}
-
-function shuffle(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-}
 
 // GET MOUSE POS
 setTimeout(function(){ 
