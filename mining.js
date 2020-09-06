@@ -1,9 +1,9 @@
 var robot = require("robotjs");
 
-let timeoutNodeOne = 2000
-let timeoutNodeTwo = 3000
+let timeoutNodeOne = 1500
+let timeoutNodeTwo = 2000
 let deltaNodeOne = 25
-let deltaNodeTwo = 90
+let deltaNodeTwo = 70
 
 let nodes = [
     { x: 712, y: 607 },
@@ -37,7 +37,7 @@ let invDrop = [
 // ]
 
 let mouseRandomMove = 5
-let mouseSpeed = 10
+let mouseSpeed = 4
 
 
 console.log('Starting')
@@ -85,7 +85,7 @@ async function smoothAction(x, y){
         console.log('MOVING MOUSE')
         let mouse = robot.getMousePos()
         console.log(mouse)
-        robot.setMouseDelay(getRndInteger(2, mouseSpeed));
+        robot.setMouseDelay(getRndInteger(1, mouseSpeed));
         while(mouse.x != x || mouse.y != y){
             mouse = robot.getMousePos()
             let move1 = getRndInteger(1, mouseRandomMove)
