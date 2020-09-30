@@ -4,7 +4,7 @@ const {dropInventory} = require('./advanced')
 
 
 let clickPosition
-let InvPos = { x: 1479, y: 714 }
+let InvPos = { x: 710, y: 515 }
 const inventorySpaces = 28
 
 let timeoutOne = 776
@@ -19,7 +19,7 @@ async function start(){
             sleep(getRndInteger(timeoutOne, timeoutTwo))
             if(getRndInteger(1,10) > 9) robot.mouseClick()
             sleep(getRndInteger(timeoutOne, timeoutTwo))
-            robot.mouseClick()
+            smoothAction(clickPosition.x, clickPosition.y)
             sleep(getRndInteger(timeoutOne, timeoutTwo))
             if(getRndInteger(1,10) > 9) robot.mouseClick()
             sleep(getRndInteger(timeoutOne, timeoutTwo))

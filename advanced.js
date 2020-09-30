@@ -21,6 +21,7 @@ exports.dropInventory = async (x,y) => {
 
 
 
+	robot.keyToggle('shift', 'down')
     for(let i in invPos){
         sleep(getRndInteger(t1,t2))
         let pos = invPos[i]
@@ -29,5 +30,6 @@ exports.dropInventory = async (x,y) => {
         await smoothAction(pos.x, pos.y)
         sleep(getRndInteger(t1,t2))
     }
+	robot.keyToggle('shift', 'up')
     
 }
